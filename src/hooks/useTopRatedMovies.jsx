@@ -15,7 +15,7 @@ const useTopRatedMovies = () => {
     dispatch(addTopRatedMovies(json.results));
   };
   useEffect(() => {
-    if (!topRatedMovies) getTopRatedMovies();
+    !topRatedMovies && getTopRatedMovies();
   }, []);
 };
 export default useTopRatedMovies;
