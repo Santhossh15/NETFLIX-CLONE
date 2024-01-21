@@ -11,6 +11,7 @@ import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { BACKGROUND_URL, USER_PHOTO } from "../utils/constants";
+import { resetGptState } from "../utils/gptSlice";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -43,6 +44,7 @@ const Login = () => {
             displayName: name.current.value,
             photoURL: USER_PHOTO,
           });
+          dispatch(resetGptState());
         })
         //Fetching From Updated Value(Not from older value)
         .then(() => {
@@ -72,6 +74,7 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          dispatch(resetGptState());
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -84,7 +87,7 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute">
-        <img className="h-screen object-cover" src={BACKGROUND_URL} />
+        <img className="h-screen w-screen object-cover" src={BACKGROUND_URL} />
       </div>
       <form
         onSubmit={(e) => {

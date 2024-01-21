@@ -8,10 +8,15 @@ export const API_OPTIONS = {
     }
 };
 export const IMG_URL = "https://image.tmdb.org/t/p/w500";
-export const BACKGROUND_URL = "https://assets.nflxext.com/ffe/siteui/vlv3/594f8025-139a-4a35-b58d-4ecf8fdc507c/d3c4e455-f0bf-4003-b7cd-511dda6da82a/IN-en-20240108-popsignuptwoweeks-perspective_alpha_website_large.jpg"
+export const BACKGROUND_URL = "https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg"
 export const languages = [
     { identifier: "english", name: "English" },
+    { identifier: "tamil", name: 'தமிழ்' },
     { identifier: "hindi", name: "Hindi" },
     { identifier: "spanish", name: "Spanish" },
 ]
-export const CHATGPT_KEY = process.env.REACT_APP_CHATGPT_KEY;
+export const CHATGPT_KEY = process.env.REACT_APP_CHATGPT_KEY
+export const BARD_KEY = process.env.REACT_APP_BARD_KEY
+
+
+//https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg

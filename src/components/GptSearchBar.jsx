@@ -3,8 +3,9 @@ import lang from "../utils/languageConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import openai from "../utils/openAi";
-import { API_OPTIONS } from "../utils/constants";
+import { API_OPTIONS, BARD_KEY } from "../utils/constants";
 import { addGptMovieResult } from "../utils/gptSlice";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const GptSearchBar = () => {
   const dispatch = useDispatch();
@@ -17,33 +18,28 @@ const GptSearchBar = () => {
     const data = await fetch(
       "https://api.themoviedb.org/3/search/movie?query=" +
         movie +
-        "include_adult=false&language=en-US&page=1",
+        "&include_adult=false&language=en-US&page=1",
       API_OPTIONS
     );
     const json = await data.json();
     return json.results;
   };
 
-  const handleGptSearch = async () => {
-    //Make an API call to GPT API and get results
+  const genAI = new GoogleGenerativeAI(BARD_KEY);
+  const handleBardSearch = async () => {
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const query =
       "Act as a Movie Recommendation system and suggest some movies for the query : " +
       searchText.current.value +
-      ". Only give me names of 4 Movies, comma seperated like the example result given ahead. Example Result: Veeram, Mangatha, Jilla, Viswasam";
-
-    const results = await openai.chat.completions.create({
-      messages: [{ role: "user", content: query }],
-      model: "gpt-3.5-turbo",
-    });
-
-    const gptMovies = results?.choices[0]?.message?.content?.split(", ");
-
-    const promise = gptMovies.map((movie) => searchMovie());
-
-    const tmdbResults = await Promise.all(promise);
-
+      ". Only give me names of 5 Movies , comma seperated like the example result given ahead. Example Result: Veeram, Mangatha, Jilla, Viswasam";
+    const result = await model.generateContent(query);
+    const response = await result.response;
+    const text = await response.text();
+    const movies = text.split(",");
+    const promise = movies.map((movie) => searchMovie(movie));
+    const bardResults = await Promise.all(promise);
     dispatch(
-      addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
+      addGptMovieResult({ movieNames: movies, movieResults: bardResults })
     );
   };
 
@@ -61,7 +57,7 @@ const GptSearchBar = () => {
         />
         <button
           className=" col-span-3 py-2 px-4 m-4 bg-red-700 text-white rounded-lg"
-          onClick={handleGptSearch}
+          onClick={handleBardSearch}
         >
           {lang[langKey].search}
         </button>
@@ -70,3 +66,27 @@ const GptSearchBar = () => {
   );
 };
 export default GptSearchBar;
+
+// const handleGptSearch = async () => {
+//   //Make an API call to GPT API and get results
+//   const query =
+//     "Act as a Movie Recommendation system and suggest some movies for the query : " +
+//     searchText.current.value +
+//     ". Only give me names of 4 Movies, comma seperated like the example result given ahead. Example Result: Veeram, Mangatha, Jilla, Viswasam";
+
+//   const results = await openai.chat.completions.create({
+//     messages: [{ role: "user", content: query }],
+//     model: "gpt-3.5-turbo",
+//   });
+//   // Access your API key as an environment variable (see "Set up your API key" above)
+
+//   const gptMovies = results?.choices[0]?.message?.content?.split(", ");
+
+//   const promise = gptMovies.map((movie) => searchMovie(movie));
+
+//   const tmdbResults = await Promise.all(promise);
+
+//   dispatch(
+//     addGptMovieResult({ movieNames: gptMovies, movieResults: tmdbResults })
+//   );
+// };

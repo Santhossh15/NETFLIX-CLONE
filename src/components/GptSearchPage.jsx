@@ -7,7 +7,7 @@ export const GptSearchPage = () => {
     <>
       <div className="fixed -z-10">
         <img
-          className="h-screen object-cover"
+          className="h-screen w-screen object-cover"
           src={BACKGROUND_URL}
           alt="logo"
         />
